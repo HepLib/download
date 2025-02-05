@@ -19,11 +19,6 @@ jobs:
           MYNAME: ${{ github.repository_owner }}          
         run: |
           CWD=$PWD
-          sudo apt install wget
-          mkdir Install
-          cd Install
-          #wget https://gmplib.org/download/gmp/gmp-6.3.0.tar.gz
-          #wget https://www.mpfr.org/mpfr-current/mpfr-4.2.1.tar.gz
           cd Install
           rm -rf FIRE GiNaC HepLib FIRE.tar.gz GiNaC.tar.gz HepLib.tar.gz
           rm -rf $CWD/FIRE/src
