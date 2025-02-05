@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: doxygen
+      - name: Install.tar.gz
         env:
           TOKEN: ${{ secrets.PERSONAL_TOKEN }}
           REF: github.com/${{ github.repository }}.git
@@ -22,7 +22,7 @@ jobs:
           sudo apt install wget
           mkdir Install
           cd Install
-          wget https://gmplib.org/download/gmp/gmp-6.3.0.tar.gz
+          #wget https://gmplib.org/download/gmp/gmp-6.3.0.tar.gz
           #wget https://www.mpfr.org/mpfr-current/mpfr-4.2.1.tar.gz
           cd Install
           rm -rf FIRE GiNaC HepLib FIRE.tar.gz GiNaC.tar.gz HepLib.tar.gz
