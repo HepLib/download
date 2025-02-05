@@ -36,7 +36,7 @@ jobs:
           tar cfz Install.tar.gz Install
           mkdir www
           cd www
-          mv ../Install.tar.gz www
+          mv ../Install.tar.gz .
           git config --global user.email "${MYEMAIL}"
           git config --global user.name "${MYNAME}"
           git init
