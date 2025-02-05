@@ -18,11 +18,30 @@ jobs:
           MYEMAIL: f.feng@outlook.com
           MYNAME: ${{ github.repository_owner }}          
         run: |
-          sudo apt-get install graphviz
-          sudo apt-get install -y doxygen
-          cd doc
-          doxygen
-          cd html
+          CWD=$PWD
+          sudo apt install wget
+          mkdir Install
+          cd Install
+          wget https://gmplib.org/download/gmp/gmp-6.3.0.tar.gz
+          wget https://www.mpfr.org/mpfr-current/mpfr-4.2.1.tar.gz
+          cd Install
+          rm -rf FIRE GiNaC HepLib FIRE.tar.gz GiNaC.tar.gz HepLib.tar.gz
+          rm -rf $CWD/FIRE/src
+          cp -r $CWD/FIREs/src $CWD/FIRE
+          cp -r $CWD/FIRE .
+          tar cfz FIRE.tar.gz FIRE
+          cp -r $CWD/GiNaC .
+          rm -rf GiNaC/build/*
+          tar cfz GiNaC.tar.gz GiNaC
+          cp -r $CWD/HepLib .
+          rm -rf HepLib/build/*
+          tar cfz HepLib.tar.gz HepLib
+          rm -rf FIRE GiNaC HepLib
+          cd $CWD
+          tar cfz Install.tar.gz Install
+          mkdir www
+          cd www
+          mv ../Install.tar.gz www
           git config --global user.email "${MYEMAIL}"
           git config --global user.name "${MYNAME}"
           git init
