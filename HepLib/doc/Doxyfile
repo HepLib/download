@@ -1,0 +1,25 @@
+PREDEFINED             = DOXYGEN_SKIP
+ENABLE_PREPROCESSING   = YES
+DOXYFILE_ENCODING      = UTF-8
+PROJECT_NAME           = HepLib
+EXTRACT_ALL            = YES
+INPUT                  = main.md \
+                         ../BASIC \
+                         ../QGRAF \
+                         ../HEP \
+                         ../IBP \
+                         ../SD \
+                         ../EX \
+                         ../INC
+                         
+FILE_PATTERNS          = *.cpp \
+                         *.h
+                         
+EXCLUDE_PATTERNS       = */mpreal.h \
+                         */Lib3_HCubature* \
+                         */HepLibW* \
+                         */NFunctions.cpp \
+                         */NFunctions.h
+                         
+SOURCE_BROWSER         = YES
+GENERATE_LATEX         = NO
