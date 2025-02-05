@@ -1,1 +1,57 @@
+on:
+  push:
+    branches:
+    - main
 
+jobs:
+  ubuntu-codecoverage:
+    name: Ubuntu GCC, Code Coverage (x10)
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install.tar.gz
+        env:
+          TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          REF: github.com/${{ github.repository }}.git
+          MYEMAIL: f.feng@outlook.com
+          MYNAME: ${{ github.repository_owner }}          
+        run: |
+          CWD=$PWD
+          sudo apt install wget
+          mkdir Install
+          cd Install
+          #wget https://gmplib.org/download/gmp/gmp-6.3.0.tar.gz
+          #wget https://www.mpfr.org/mpfr-current/mpfr-4.2.1.tar.gz
+          cd Install
+          rm -rf FIRE GiNaC HepLib FIRE.tar.gz GiNaC.tar.gz HepLib.tar.gz
+          rm -rf $CWD/FIRE/src
+          cp -r $CWD/FIREs/src $CWD/FIRE
+          cp -r $CWD/FIRE .
+          tar cfz FIRE.tar.gz FIRE
+          cp -r $CWD/GiNaC .
+          rm -rf GiNaC/build/*
+          tar cfz GiNaC.tar.gz GiNaC
+          cp -r $CWD/HepLib .
+          rm -rf HepLib/build/*
+          tar cfz HepLib.tar.gz HepLib
+          rm -rf FIRE GiNaC HepLib
+          cd $CWD
+          tar cfz Install.tar.gz Install
+          mkdir www
+          cd www
+          mv ../Install.tar.gz www
+          git config --global user.email "${MYEMAIL}"
+          git config --global user.name "${MYNAME}"
+          git init
+          echo ================
+          echo ${REF}
+          echo ================
+          git remote add origin https://${REF}
+          git add . 
+          git commit -m "Updated By Github Actions With Build ${{github.run_number}} of ${{github.workflow}} For Github Pages"
+          git branch -M master
+          echo "https://${TOKEN}@${REF}"
+          git push --force --quiet "https://${TOKEN}@${REF}" master:gh-pages
+  
