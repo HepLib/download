@@ -636,6 +636,6 @@ namespace HepLib {
     ex DoColor(const ex & e, const ex & pref=1, int method=0);
     ex A0(const ex m2, int n=1, const ex d=4-2*ep);
     
-        
+    void Export2AMFlow(const ex &res, const string & dir, const lst & loop, const lst & leg, const lst & replacement=lst{}, const lst & numeric=lst{});
 }
 
