@@ -36,7 +36,7 @@ echo ""
 #================================================================
 # Install MPFR
 #================================================================
-export pkg="mpfr-4.2.1"
+export pkg="mpfr-4.2.2"
 export LOG=$LOGS/$pkg.log
 echo "Installing $pkg ..."
 rm -rf $pkg
@@ -99,7 +99,7 @@ echo ""
 #================================================================
 # Install FLINT
 #================================================================
-export pkg="flint-3.1.3"
+export pkg="flint-3.2.1"
 export LOG=$LOGS/$pkg.log
 echo "Installing $pkg ..."
 rm -rf $pkg
