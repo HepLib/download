@@ -32,11 +32,13 @@ jobs:
           rm -rf HepLib/build/*
           tar cfz HepLib.tar.gz HepLib
           rm -rf FIRE GiNaC HepLib
-          cd $CWD
-          tar cfz Install.tar.gz Install
-          cd Install
-          INSTALL_PATH=$CWD/usr jn=4 ./install.sh
-          tar cfz usr.tar.gz usr
+          #
+          #cd $CWD
+          #tar cfz Install.tar.gz Install
+          #cd Install
+          #INSTALL_PATH=$CWD/usr jn=4 ./install.sh
+          #tar cfz usr.tar.gz usr
+          #
           cd $CWD
           mkdir www
           cd www
