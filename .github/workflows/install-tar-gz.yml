@@ -38,6 +38,7 @@ jobs:
           cd $CWD
           cd Install
           INSTALL_PATH=$CWD/usr jn=2 ./install.sh
+          cd $CWD
           tar cfz usr.tar.gz usr
           ##############################
           cd $CWD
