@@ -35,16 +35,18 @@ jobs:
           cd $CWD
           tar cfz Install.tar.gz Install
           ##############################
-          #cd $CWD
-          #cd Install
-          #INSTALL_PATH=$CWD/usr jn=2 ./install.sh
-          #tar cfz usr.tar.gz usr
+          cd $CWD
+          cd Install
+          INSTALL_PATH=$CWD/usr jn=2 ./install.sh
+          tar cfz usr.tar.gz usr
           ##############################
           cd $CWD
           mkdir www
           cd www
           mv ../Install.tar.gz .
+          ##############################
           mv ../usr.tar.gz .
+          ##############################
           git config --global user.email "${MYEMAIL}"
           git config --global user.name "${MYNAME}"
           git init
