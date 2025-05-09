@@ -32,18 +32,22 @@ jobs:
           rm -rf HepLib/build/*
           tar cfz HepLib.tar.gz HepLib
           rm -rf FIRE GiNaC HepLib
-          #
+          cd $CWD
+          tar cfz Install.tar.gz Install
+          ##############################
           #cd $CWD
-          #tar cfz Install.tar.gz Install
           #cd Install
-          #INSTALL_PATH=$CWD/usr jn=4 ./install.sh
+          #INSTALL_PATH=$CWD/usr jn=2 ./install.sh
+          #cd $CWD
           #tar cfz usr.tar.gz usr
-          #
+          ##############################
           cd $CWD
           mkdir www
           cd www
           mv ../Install.tar.gz .
-          mv ../usr.tar.gz .
+          ##############################
+          #mv ../usr.tar.gz .
+          ##############################
           git config --global user.email "${MYEMAIL}"
           git config --global user.name "${MYNAME}"
           git init
