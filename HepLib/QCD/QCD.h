@@ -70,12 +70,12 @@ namespace HepLib::QCD {
         ex eikonalPropagatorR(ex e, ex n, int mode=cur_mode); // right side from cut
         ex eikonalVertex(ex e, ex n, int mode=cur_mode); // 0 for gluon, 1 for quark, 2 for anti-quark
         ex eikonalVertexR(ex e, ex n, int mode=cur_mode); // right side from cut
-        ex FeynRules(const ex & amp, const ex & m0=Symbol("m0"), int mode=cur_mode);
-        lst FeynRules(const lst & amps, const ex & m0=Symbol("m0"), int mode=cur_mode);
+        ex FeynRules(const ex & amp, const ex & mQ=Symbol("mQ"), const ex & mq=0, int mode=cur_mode);
+        lst FeynRules(const lst & amps, const ex & mQ=Symbol("mQ"), const ex & mq=0, int mode=cur_mode);
         ex eSUM(int mode=cur_mode);
         
-        ex zIntFactor(int tls, const ex SF=1, int mode=cur_mode);
-        ex zIntegrate(const ex & c1, const ex & c0, const ex & n, const ex & k2, const ex & p2);
+        ex zIntFactor(int tls, const ex SF=1, const ex & kp=Symbol("kp"), const ex & z=Symbol("z"), const ex & M=Symbol("M"), int mode=cur_mode);
+        ex zIntegrate(const ex & c1, const ex & c0, const ex & n, const ex & k2, const ex & p2, const ex & z=Symbol("z"), const ex & kp=Symbol("kp"), const ex & pp=Symbol("pp"));
         
         ex FeynParameterize(const lst & ls, const lst & tls, const lst & ps, const lst & ns, const lst & lr, const lst & tlr, const lst & nr);
         
