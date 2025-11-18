@@ -42,6 +42,7 @@ namespace HepLib::SD {
     int y_free_index(ex expr);
     ex Factor(const ex expr);
     ex FactorOutX(const ex expr);
+    ex FactorFT(const ex & expr);
     ex exp_simplify(const ex);
     ex pow_simplify(const ex);
     ex xyz_pow_simplify(const ex expr);
@@ -195,7 +196,7 @@ namespace HepLib::SD {
         int lastnNAN = 0;
         int LastState = 0;
         
-        int inDQMP(qREAL const *x);
+        int XDQMP(qREAL const *x);
     };
     
     /**
@@ -222,9 +223,7 @@ namespace HepLib::SD {
         mpREAL LastResult[2];
         mpREAL LastAbsErr[2];
         int lastnNAN = 0;
-        int LastState = 0;
-        
-        int inDQMP(qREAL const *x);
+        int LastState = 0;        
     };
     
     /**
@@ -542,6 +541,9 @@ namespace HepLib::SD {
         map<int, int> used;
         vector<pair<int,ex>> on_ex_vec;
     };
+    
+    vector<matrix> Triangularize(const lst & fs_in, const ex & xs_in, const lst & nsubs={});
+    void Triangularize(exvector & FunExp, const lst & fs_in, const ex & xs_in, const lst & nsubs={});
     
 }
 
