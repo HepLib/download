@@ -965,9 +965,13 @@ namespace HepLib {
     // other helpers
     std::string get_hostname();
     std::string get_env(const std::string & name);
+    
+    // chop
+    ex chop(const ex & e, const ex & err);
 
 }
 
 typedef void (*RUN)(std::string dir_id);
 
 #include "Symbols.h"
+#include "PoolPipe.h"
