@@ -19,8 +19,21 @@ mkdir -p logs
 
 shopt -s nocasematch
 
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+
+WITH_PATH=/opt/homebrew
 #================================================================
-# Install GMP
+if [ "$OS" != "Darwin" ] || [ "$ARCH" != "arm64" ]; then
+#================================================================
+#for Apple Silicon Chip, we assume the user has run the commands
+#brew install gmp
+#brew install qhull
+#brew install texinfo
+#================================================================
+WITH_PATH=$INSTALL_PATH ### WITH_PATH -> INSTALL_PATH
+#================================================================
+# Install GMP on non-Apple Silicon Chip
 #================================================================
 if [ "$#" -eq 0 ] || [ "$1" == "GMP" ]; then
     export pkg="gmp-6.3.0"
@@ -36,6 +49,25 @@ if [ "$#" -eq 0 ] || [ "$1" == "GMP" ]; then
     rm -rf $pkg
     echo ""
 fi
+#================================================================
+# Install QHull on non-Apple Silicon Chip
+#================================================================
+if [ "$#" -eq 0 ] || [ "$1" == "QHull" ]; then
+    export pkg="qhull-2020.2"
+    export LOG=$LOGS/$pkg.log
+    echo "Installing $pkg ..."
+    rm -rf $pkg
+    unzip -q $pkg.zip
+    cd $pkg
+    make PREFIX=$INSTALL_PATH >>$LOG 2>>$LOG
+    make PREFIX=$INSTALL_PATH install >>$LOG 2>>$LOG
+    cd $CWD
+    rm -rf $pkg
+    echo ""
+fi
+#================================================================
+fi ### end for non-Apple silicon chip
+#================================================================
 
 #================================================================
 # Install MPFR
@@ -47,7 +79,7 @@ if [ "$#" -eq 0 ] || [ "$1" == "MPFR" ]; then
     rm -rf $pkg
     tar xf $pkg.tar.gz
     cd $pkg
-    ./configure --prefix=$INSTALL_PATH --with-gmp=$INSTALL_PATH --enable-float128 --enable-thread-safe >>$LOG 2>>$LOG
+    ./configure --prefix=$INSTALL_PATH --with-gmp=$WITH_PATH --enable-float128 --enable-thread-safe >>$LOG 2>>$LOG
     make -j $jn >>$LOG 2>>$LOG
     make install >>$LOG 2>>$LOG
     cd $CWD
@@ -65,7 +97,7 @@ if [ "$#" -eq 0 ] || [ "$1" == "CLN" ]; then
     rm -rf $pkg
     tar xf $pkg.tar.bz2
     cd $pkg
-    ./configure --prefix=$INSTALL_PATH --with-gmp=$INSTALL_PATH >>$LOG 2>>$LOG
+    ./configure --prefix=$INSTALL_PATH --with-gmp=$WITH_PATH >>$LOG 2>>$LOG
     make -j $jn >>$LOG 2>>$LOG
     make install >>$LOG 2>>$LOG
     cd $CWD
@@ -92,23 +124,6 @@ if [ "$#" -eq 0 ] || [ "$1" == "GiNaC" ]; then
 fi
 
 #================================================================
-# Install QHull
-#================================================================
-if [ "$#" -eq 0 ] || [ "$1" == "QHull" ]; then
-    export pkg="qhull-2020.2"
-    export LOG=$LOGS/$pkg.log
-    echo "Installing $pkg ..."
-    rm -rf $pkg
-    unzip -q $pkg.zip
-    cd $pkg
-    make PREFIX=$INSTALL_PATH >>$LOG 2>>$LOG
-    make PREFIX=$INSTALL_PATH install >>$LOG 2>>$LOG
-    cd $CWD
-    rm -rf $pkg
-    echo ""
-fi
-
-#================================================================
 # Install FLINT
 #================================================================
 if [ "$#" -eq 0 ] || [ "$1" == "Flint" ]; then
@@ -118,8 +133,18 @@ if [ "$#" -eq 0 ] || [ "$1" == "Flint" ]; then
     rm -rf $pkg
     tar xf $pkg.tar.gz
     cd $pkg
-    ./configure --enable-avx2 --enable-static=no --prefix=$INSTALL_PATH --with-gmp=$INSTALL_PATH --with-mpfr=$INSTALL_PATH >>$LOG 2>>$LOG
-    #./configure --disable-static --prefix=$INSTALL_PATH --with-gmp=$INSTALL_PATH --with-mpfr=$INSTALL_PATH CFLAGS="-O3" >>$LOG 2>>$LOG
+    #================================================================
+    if [ "$OS" != "Darwin" ] || [ "$ARCH" != "arm64" ]; then
+    #================================================================
+    ./configure --enable-avx2 --enable-static=no --prefix=$INSTALL_PATH --with-gmp=$WITH_PATH --with-mpfr=$WITH_PATH >>$LOG 2>>$LOG
+    #./configure --disable-static --prefix=$INSTALL_PATH --with-gmp=$WITH_PATH --with-mpfr=$WITH_PATH CFLAGS="-O3" >>$LOG 2>>$LOG
+    #================================================================
+    else
+    #================================================================
+    ./configure CFLAGS="-Wno-incompatible-pointer-types" --enable-static=no --prefix=$INSTALL_PATH --with-gmp=$WITH_PATH --with-mpfr=$WITH_PATH >>$LOG 2>>$LOG
+    #================================================================
+    fi
+    #================================================================
     make -j $jn >>$LOG 2>>$LOG
     make install >>$LOG 2>>$LOG
     cd $CWD
@@ -168,10 +193,13 @@ fi
 #================================================================
 if [ "$#" -eq 0 ] || [ "$1" == "Fermat" ]; then
     echo "Installing Fermat ..."
-    uo="$(uname -s)"
-    case "${uo}" in
-        Linux*)     pkg="Ferl7";;
-        Darwin*)    pkg="Ferm7i";;
+    case "${OS}" in
+        Linux*) pkg="Ferl7";;
+        Darwin*)
+            case "$ARCH" in
+                x86_64) pkg="Ferm7i";;
+                arm64) pkg="Ferm7a";;
+            esac
     esac
     export pkg
     rm -rf $pkg
@@ -188,8 +216,7 @@ fi
 # Install Form
 #================================================================
 if [ "$#" -eq 0 ] || [ "$1" == "FORM" ]; then
-    uo="$(uname -s)"
-    case "${uo}" in
+    case "${OS}" in
         Linux*)     pkg="form-4.3.1-x86_64-linux";;
         Darwin*)    pkg="form-4.3.1-x86_64-osx";;
     esac
@@ -229,7 +256,19 @@ if [ "$#" -eq 0 ] || [ "$1" == "HepLib" ]; then
     tar xf $pkg.tar.gz
     cd $pkg
     mkdir -p build && cd build
+    
+    #================================================================
+    if [ "$OS" != "Darwin" ] || [ "$ARCH" != "arm64" ]; then
+    #================================================================
     cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH ..
+    #================================================================
+    else
+    #================================================================
+    cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DINC_PATH=/opt/homebrew/include -DLIB_PATH=/opt/homebrew/lib ..
+    #================================================================
+    fi
+    #================================================================
+    
     make -j $jn
     make install
     make pch
